@@ -36,6 +36,7 @@ body {
     z-index: 99999;
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
     transition: opacity .75s ease, visibility .75s ease;
 }
 
@@ -61,6 +62,8 @@ body {
     color: #dcecff;
     z-index: 99998;
     opacity: 1;
+    visibility: visible;
+    pointer-events: none;
 }
 
 #boot.active {
@@ -528,6 +531,15 @@ h1 {
 .system-card-value {
     color: #829caf;
     font-size: 8px;
+    overflow-wrap: anywhere;
+}
+
+#networkValue.online {
+    color: #6fc99e;
+}
+
+#networkValue.offline {
+    color: #c87979;
 }
 
 /* =========================================================
@@ -562,6 +574,7 @@ h1 {
    ========================================================= */
 
 @media (max-width: 760px) {
+
     .topbar {
         grid-template-columns: 1fr auto;
         grid-template-areas:
@@ -634,6 +647,7 @@ h1 {
 }
 
 @media (max-width: 430px) {
+
     .topbar {
         grid-template-columns: 1fr;
         grid-template-areas:
@@ -669,8 +683,8 @@ h1 {
     }
 }
 
-/* Very short screens */
 @media (max-height: 650px) and (min-width: 761px) {
+
     .content {
         padding-top: 6vh;
     }
@@ -684,8 +698,8 @@ h1 {
     }
 }
 
-/* Accessibility */
 @media (prefers-reduced-motion: reduce) {
+
     *,
     *::before,
     *::after {
@@ -700,17 +714,21 @@ h1 {
 
 <body>
 
-<!--
-    The page intentionally starts completely white.
-    Type the secret unlock sequence on the keyboard to continue.
--->
+<!-- Completely white screen until the unlock sequence is entered -->
 <div id="blank" aria-hidden="true"></div>
 
 <div id="boot">
     <div class="boot-logo">CJAO</div>
-    <div class="boot-subtitle">PERSONAL OPERATING SYSTEM</div>
+
+    <div class="boot-subtitle">
+        PERSONAL OPERATING SYSTEM
+    </div>
+
     <div class="boot-progress"></div>
-    <div class="boot-status">INITIALIZING SYSTEM...</div>
+
+    <div class="boot-status">
+        INITIALIZING SYSTEM...
+    </div>
 </div>
 
 <div id="experience">
@@ -718,21 +736,56 @@ h1 {
     <div class="grid"></div>
     <div class="glow"></div>
 
-    <div class="particle" style="left:8%;top:90%;animation-duration:14s;"></div>
-    <div class="particle" style="left:17%;top:70%;animation-duration:18s;"></div>
-    <div class="particle" style="left:27%;top:85%;animation-duration:12s;"></div>
-    <div class="particle" style="left:39%;top:95%;animation-duration:20s;"></div>
-    <div class="particle" style="left:53%;top:80%;animation-duration:16s;"></div>
-    <div class="particle" style="left:66%;top:92%;animation-duration:13s;"></div>
-    <div class="particle" style="left:77%;top:75%;animation-duration:19s;"></div>
-    <div class="particle" style="left:89%;top:88%;animation-duration:15s;"></div>
+    <div
+        class="particle"
+        style="left:8%;top:90%;animation-duration:14s;"
+    ></div>
+
+    <div
+        class="particle"
+        style="left:17%;top:70%;animation-duration:18s;"
+    ></div>
+
+    <div
+        class="particle"
+        style="left:27%;top:85%;animation-duration:12s;"
+    ></div>
+
+    <div
+        class="particle"
+        style="left:39%;top:95%;animation-duration:20s;"
+    ></div>
+
+    <div
+        class="particle"
+        style="left:53%;top:80%;animation-duration:16s;"
+    ></div>
+
+    <div
+        class="particle"
+        style="left:66%;top:92%;animation-duration:13s;"
+    ></div>
+
+    <div
+        class="particle"
+        style="left:77%;top:75%;animation-duration:19s;"
+    ></div>
+
+    <div
+        class="particle"
+        style="left:89%;top:88%;animation-duration:15s;"
+    ></div>
 
     <header class="topbar">
+
         <div class="brand">
             CJAO <span>/ SYSTEM</span>
         </div>
 
-        <div class="assistant" id="assistant">
+        <div
+            class="assistant"
+            id="assistant"
+        >
             PERSONAL OS ONLINE
         </div>
 
@@ -740,19 +793,27 @@ h1 {
             <strong id="time">--:--:--</strong>
             <span id="date">---</span>
         </div>
+
     </header>
 
     <main class="content">
 
-        <div class="eyebrow">SYSTEM ONLINE</div>
+        <div class="eyebrow">
+            SYSTEM ONLINE
+        </div>
 
-        <h1>WELCOME<br>CALEB JAO</h1>
+        <h1>
+            WELCOME<br>CALEB JAO
+        </h1>
 
         <div class="subtitle">
             YOUR PERSONAL OPERATING SYSTEM
         </div>
 
-        <form class="google-search" id="searchForm">
+        <form
+            class="google-search"
+            id="searchForm"
+        >
 
             <div class="search-box">
 
@@ -769,9 +830,17 @@ h1 {
                     class="search-engine"
                     aria-label="Search engine"
                 >
-                    <option value="google">GOOGLE</option>
-                    <option value="bing">BING</option>
-                    <option value="yahoo">YAHOO</option>
+                    <option value="google">
+                        GOOGLE
+                    </option>
+
+                    <option value="bing">
+                        BING
+                    </option>
+
+                    <option value="yahoo">
+                        YAHOO
+                    </option>
                 </select>
 
                 <button
@@ -785,54 +854,78 @@ h1 {
 
         </form>
 
-        <!-- Only added feature: Bing News category buttons -->
-        <div class="news-buttons" aria-label="Bing News">
+        <div
+            class="news-buttons"
+            aria-label="Bing News"
+        >
+
             <a
                 href="https://www.bing.com/news"
                 target="_blank"
                 rel="noopener noreferrer"
-            >TOP STORIES</a>
+            >
+                TOP STORIES
+            </a>
 
             <a
                 href="https://www.bing.com/news/search?q=US+News"
                 target="_blank"
                 rel="noopener noreferrer"
-            >US</a>
+            >
+                US
+            </a>
 
             <a
                 href="https://www.bing.com/news/search?q=World+News"
                 target="_blank"
                 rel="noopener noreferrer"
-            >WORLD</a>
+            >
+                WORLD
+            </a>
 
             <a
                 href="https://www.bing.com/news/search?q=Business+News"
                 target="_blank"
                 rel="noopener noreferrer"
-            >BUSINESS</a>
+            >
+                BUSINESS
+            </a>
 
             <a
                 href="https://www.bing.com/news/search?q=Technology+News"
                 target="_blank"
                 rel="noopener noreferrer"
-            >TECH</a>
+            >
+                TECH
+            </a>
 
             <a
                 href="https://www.bing.com/news/search?q=Sports+News"
                 target="_blank"
                 rel="noopener noreferrer"
-            >SPORTS</a>
+            >
+                SPORTS
+            </a>
 
             <a
                 href="https://www.bing.com/news/search?q=Entertainment+News"
                 target="_blank"
                 rel="noopener noreferrer"
-            >ENTERTAINMENT</a>
+            >
+                ENTERTAINMENT
+            </a>
+
         </div>
 
-        <div class="results-panel" id="resultsPanel">
+        <div
+            class="results-panel"
+            id="resultsPanel"
+        >
 
-            <div class="results-header" id="resultsHeader">
+            <div
+                class="results-header"
+                id="resultsHeader"
+            >
                 SEARCH RESULTS
             </div>
 
@@ -853,18 +946,48 @@ h1 {
         <div class="system-cards">
 
             <div class="system-card">
-                <div class="system-card-label">STATUS</div>
-                <div class="system-card-value">ONLINE</div>
+
+                <div class="system-card-label">
+                    OPERATING SYSTEM
+                </div>
+
+                <div
+                    class="system-card-value"
+                    id="osValue"
+                >
+                    DETECTING...
+                </div>
+
             </div>
 
             <div class="system-card">
-                <div class="system-card-label">CORE</div>
-                <div class="system-card-value">CJAO OS</div>
+
+                <div class="system-card-label">
+                    IP ADDRESS
+                </div>
+
+                <div
+                    class="system-card-value"
+                    id="ipValue"
+                >
+                    DETECTING...
+                </div>
+
             </div>
 
             <div class="system-card">
-                <div class="system-card-label">ACCESS</div>
-                <div class="system-card-value">PRIVATE</div>
+
+                <div class="system-card-label">
+                    STATUS
+                </div>
+
+                <div
+                    class="system-card-value"
+                    id="networkValue"
+                >
+                    CHECKING...
+                </div>
+
             </div>
 
         </div>
@@ -886,41 +1009,84 @@ h1 {
    ELEMENTS
    ========================================================= */
 
-const blank = document.getElementById("blank");
-const boot = document.getElementById("boot");
-const experience = document.getElementById("experience");
+const blank =
+    document.getElementById("blank");
 
-const searchForm = document.getElementById("searchForm");
-const searchInput = document.getElementById("searchInput");
-const searchEngine = document.getElementById("searchEngine");
-const resultsPanel = document.getElementById("resultsPanel");
-const results = document.getElementById("results");
-const resultsHeader = document.getElementById("resultsHeader");
-const findMore = document.getElementById("findMore");
+const boot =
+    document.getElementById("boot");
 
-const assistant = document.getElementById("assistant");
-const timeElement = document.getElementById("time");
-const dateElement = document.getElementById("date");
+const experience =
+    document.getElementById("experience");
+
+const searchForm =
+    document.getElementById("searchForm");
+
+const searchInput =
+    document.getElementById("searchInput");
+
+const searchEngine =
+    document.getElementById("searchEngine");
+
+const resultsPanel =
+    document.getElementById("resultsPanel");
+
+const results =
+    document.getElementById("results");
+
+const resultsHeader =
+    document.getElementById("resultsHeader");
+
+const findMore =
+    document.getElementById("findMore");
+
+const assistant =
+    document.getElementById("assistant");
+
+const timeElement =
+    document.getElementById("time");
+
+const dateElement =
+    document.getElementById("date");
+
+const osValue =
+    document.getElementById("osValue");
+
+const ipValue =
+    document.getElementById("ipValue");
+
+const networkValue =
+    document.getElementById("networkValue");
 
 /* =========================================================
    SEARCH CONFIG
    ========================================================= */
 
 const engineConfig = {
+
     google: {
-        searchURL: "https://www.google.com/search?q=",
-        readerURL: "https://r.jina.ai/http://www.google.com/search?q="
+        searchURL:
+            "https://www.google.com/search?q=",
+
+        readerURL:
+            "https://r.jina.ai/http://www.google.com/search?q="
     },
 
     bing: {
-        searchURL: "https://www.bing.com/search?q=",
-        readerURL: "https://r.jina.ai/http://www.bing.com/search?q="
+        searchURL:
+            "https://www.bing.com/search?q=",
+
+        readerURL:
+            "https://r.jina.ai/http://www.bing.com/search?q="
     },
 
     yahoo: {
-        searchURL: "https://search.yahoo.com/search?p=",
-        readerURL: "https://r.jina.ai/http://search.yahoo.com/search?p="
+        searchURL:
+            "https://search.yahoo.com/search?p=",
+
+        readerURL:
+            "https://r.jina.ai/http://search.yahoo.com/search?p="
     }
+
 };
 
 /* =========================================================
@@ -938,92 +1104,375 @@ const assistantMessages = [
 
 let assistantIndex = 0;
 
+setInterval(() => {
+
+    assistantIndex =
+        (assistantIndex + 1) %
+        assistantMessages.length;
+
+    assistant.textContent =
+        assistantMessages[assistantIndex];
+
+}, 20000);
+
 /* =========================================================
    CLOCK
    ========================================================= */
 
 function updateClock() {
-    const now = new Date();
 
-    timeElement.textContent = now.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit"
-    });
+    const now =
+        new Date();
 
-    dateElement.textContent = now
-        .toLocaleDateString([], {
+    timeElement.textContent =
+        now.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        });
+
+    dateElement.textContent =
+        now.toLocaleDateString([], {
             weekday: "short",
             month: "short",
             day: "numeric",
             year: "numeric"
-        })
-        .toUpperCase();
+        }).toUpperCase();
 }
 
 updateClock();
 setInterval(updateClock, 1000);
 
 /* =========================================================
-   ASSISTANT ROTATION
+   OPERATING SYSTEM DETECTION
    ========================================================= */
 
-setInterval(() => {
-    assistantIndex =
-        (assistantIndex + 1) % assistantMessages.length;
+function detectOperatingSystem() {
 
-    assistant.textContent =
-        assistantMessages[assistantIndex];
-}, 20000);
+    const userAgent =
+        (navigator.userAgent || "")
+            .toLowerCase();
+
+    const platform =
+        (navigator.platform || "")
+            .toLowerCase();
+
+    if (
+        userAgent.includes("cros") ||
+        platform.includes("cros")
+    ) {
+        return "CHROMEOS";
+    }
+
+    if (
+        platform.includes("win") ||
+        userAgent.includes("windows")
+    ) {
+        return "WINDOWS";
+    }
+
+    if (
+        platform.includes("mac") &&
+        !userAgent.includes("iphone") &&
+        !userAgent.includes("ipad")
+    ) {
+        return "MACOS";
+    }
+
+    if (
+        userAgent.includes("android")
+    ) {
+        return "ANDROID";
+    }
+
+    if (
+        userAgent.includes("iphone") ||
+        userAgent.includes("ipad") ||
+        userAgent.includes("ipod")
+    ) {
+        return "IOS / IPADOS";
+    }
+
+    if (
+        platform.includes("linux") ||
+        userAgent.includes("linux")
+    ) {
+        return "LINUX";
+    }
+
+    return "UNKNOWN";
+}
+
+function updateOperatingSystem() {
+
+    osValue.textContent =
+        detectOperatingSystem();
+}
 
 /* =========================================================
-   STARTUP SOUND
+   PUBLIC IP ADDRESS
    ========================================================= */
 
-function startupSound() {
+let ipRequestInProgress = false;
+
+async function updateIPAddress() {
+
+    if (ipRequestInProgress) {
+        return;
+    }
+
+    ipRequestInProgress = true;
+
+    ipValue.textContent =
+        "DETECTING...";
+
     try {
+
+        /*
+            This retrieves the public IP from a CORS-enabled
+            IP service. The page itself stays a single HTML file.
+        */
+
+        const response =
+            await fetch(
+                "https://api.ipify.org?format=json",
+                {
+                    method: "GET",
+                    cache: "no-store"
+                }
+            );
+
+        if (!response.ok) {
+            throw new Error(
+                "IP lookup failed."
+            );
+        }
+
+        const data =
+            await response.json();
+
+        if (
+            data &&
+            typeof data.ip === "string" &&
+            data.ip.trim()
+        ) {
+
+            ipValue.textContent =
+                data.ip.trim();
+
+        } else {
+
+            throw new Error(
+                "No IP returned."
+            );
+        }
+
+    } catch (error) {
+
+        ipValue.textContent =
+            "UNAVAILABLE";
+
+    } finally {
+
+        ipRequestInProgress =
+            false;
+    }
+}
+
+/* =========================================================
+   NETWORK STATUS
+   ========================================================= */
+
+function updateNetworkStatus() {
+
+    const online =
+        navigator.onLine;
+
+    networkValue.textContent =
+        online
+            ? "ONLINE"
+            : "OFFLINE";
+
+    networkValue.classList.toggle(
+        "online",
+        online
+    );
+
+    networkValue.classList.toggle(
+        "offline",
+        !online
+    );
+}
+
+window.addEventListener(
+    "online",
+    updateNetworkStatus
+);
+
+window.addEventListener(
+    "offline",
+    updateNetworkStatus
+);
+
+/* =========================================================
+   SYSTEM INFORMATION
+   ========================================================= */
+
+function updateSystemInfo() {
+
+    updateOperatingSystem();
+    updateNetworkStatus();
+    updateIPAddress();
+}
+
+/* =========================================================
+   STARTUP MUSIC
+   ========================================================= */
+
+let startupAudioContext = null;
+
+function playStartupMusic() {
+
+    try {
+
         const AudioContext =
             window.AudioContext ||
             window.webkitAudioContext;
 
-        if (!AudioContext) return;
+        if (!AudioContext) {
+            return;
+        }
 
-        const ctx = new AudioContext();
-        const oscillator = ctx.createOscillator();
-        const gain = ctx.createGain();
+        if (!startupAudioContext) {
 
-        oscillator.type = "sine";
+            startupAudioContext =
+                new AudioContext();
+        }
 
-        oscillator.frequency.setValueAtTime(
-            220,
-            ctx.currentTime
-        );
+        const ctx =
+            startupAudioContext;
 
-        oscillator.frequency.exponentialRampToValueAtTime(
-            880,
-            ctx.currentTime + 0.45
-        );
+        if (
+            ctx.state ===
+            "suspended"
+        ) {
+            ctx.resume();
+        }
 
-        gain.gain.setValueAtTime(
+        const start =
+            ctx.currentTime + 0.03;
+
+        const master =
+            ctx.createGain();
+
+        master.gain.setValueAtTime(
             0.0001,
-            ctx.currentTime
+            start
         );
 
-        gain.gain.exponentialRampToValueAtTime(
-            0.06,
-            ctx.currentTime + 0.03
+        master.gain.exponentialRampToValueAtTime(
+            0.075,
+            start + 0.045
         );
 
-        gain.gain.exponentialRampToValueAtTime(
+        master.gain.setValueAtTime(
+            0.075,
+            start + 0.95
+        );
+
+        master.gain.exponentialRampToValueAtTime(
             0.0001,
-            ctx.currentTime + 0.5
+            start + 1.25
         );
 
-        oscillator.connect(gain);
-        gain.connect(ctx.destination);
+        master.connect(
+            ctx.destination
+        );
 
-        oscillator.start();
-        oscillator.stop(ctx.currentTime + 0.5);
+        const notes = [
+
+            {
+                time: 0.00,
+                duration: 0.18,
+                frequency: 392.00
+            },
+
+            {
+                time: 0.16,
+                duration: 0.18,
+                frequency: 523.25
+            },
+
+            {
+                time: 0.32,
+                duration: 0.18,
+                frequency: 659.25
+            },
+
+            {
+                time: 0.48,
+                duration: 0.18,
+                frequency: 783.99
+            },
+
+            {
+                time: 0.66,
+                duration: 0.24,
+                frequency: 659.25
+            },
+
+            {
+                time: 0.88,
+                duration: 0.30,
+                frequency: 1046.50
+            }
+        ];
+
+        notes.forEach(note => {
+
+            const oscillator =
+                ctx.createOscillator();
+
+            const gain =
+                ctx.createGain();
+
+            oscillator.type =
+                "sine";
+
+            oscillator.frequency.setValueAtTime(
+                note.frequency,
+                start + note.time
+            );
+
+            gain.gain.setValueAtTime(
+                0.0001,
+                start + note.time
+            );
+
+            gain.gain.exponentialRampToValueAtTime(
+                0.22,
+                start + note.time + 0.025
+            );
+
+            gain.gain.exponentialRampToValueAtTime(
+                0.0001,
+                start + note.time + note.duration
+            );
+
+            oscillator.connect(gain);
+            gain.connect(master);
+
+            oscillator.start(
+                start + note.time
+            );
+
+            oscillator.stop(
+                start +
+                note.time +
+                note.duration +
+                0.02
+            );
+        });
 
     } catch (error) {
         /* Audio is optional. */
@@ -1031,99 +1480,256 @@ function startupSound() {
 }
 
 /* =========================================================
+   RESET BOOT STATE
+   ========================================================= */
+
+function resetBootState() {
+
+    /*
+        This is the important fix for repeated logins.
+
+        Every time the system is locked and the secret is
+        entered again, the boot screen is returned to a
+        completely clean state instead of retaining the
+        previous inline opacity / transition state.
+    */
+
+    boot.classList.remove(
+        "active"
+    );
+
+    boot.style.opacity =
+        "1";
+
+    boot.style.visibility =
+        "visible";
+
+    boot.style.display =
+        "none";
+
+    boot.style.transition =
+        "";
+
+    experience.classList.remove(
+        "active"
+    );
+
+    experience.style.opacity =
+        "";
+
+    experience.style.visibility =
+        "";
+}
+
+/* =========================================================
    BOOT SEQUENCE
    ========================================================= */
 
+let bootInProgress = false;
+
 function startBoot() {
 
-    blank.classList.add("unlocking");
+    if (bootInProgress) {
+        return;
+    }
 
-    setTimeout(() => {
-        boot.classList.add("active");
+    bootInProgress = true;
+
+    /*
+        Make absolutely sure the previous lock cycle
+        cannot leave stale styles behind.
+    */
+
+    resetBootState();
+
+    blank.classList.add(
+        "unlocking"
+    );
+
+    /*
+        Force the boot state to be visible again.
+    */
+
+    boot.style.display =
+        "flex";
+
+    boot.style.opacity =
+        "1";
+
+    boot.style.visibility =
+        "visible";
+
+    boot.style.transition =
+        "";
+
+    boot.classList.add(
+        "active"
+    );
+
+    /*
+        Startup music is triggered on every successful unlock.
+    */
+
+    playStartupMusic();
+
+    /*
+        Give the browser one frame to apply the reset before
+        starting the fade.
+    */
+
+    requestAnimationFrame(() => {
 
         setTimeout(() => {
 
             boot.style.transition =
                 "opacity .8s ease";
 
-            boot.style.opacity = "0";
+            boot.style.opacity =
+                "0";
 
             setTimeout(() => {
 
-                boot.classList.remove("active");
-                boot.style.opacity = "1";
-                boot.style.transition = "";
+                /*
+                    Hide boot completely before activating
+                    the main system. This prevents an invisible
+                    boot layer from intercepting anything.
+                */
 
-                experience.classList.add("active");
+                boot.classList.remove(
+                    "active"
+                );
 
-                startupSound();
+                boot.style.display =
+                    "none";
+
+                boot.style.opacity =
+                    "1";
+
+                boot.style.visibility =
+                    "visible";
+
+                boot.style.transition =
+                    "";
+
+                experience.classList.add(
+                    "active"
+                );
+
+                updateSystemInfo();
+
+                bootInProgress = false;
 
             }, 800);
 
         }, 3000);
 
-    }, 250);
+    });
 }
 
 /* =========================================================
    SECRET WHITE-SCREEN UNLOCK
    ========================================================= */
 
-const unlockSequence = "alberte=mc2*";
+const unlockSequence =
+    "alberte=mc2*";
+
 let unlockBuffer = "";
 
 function handleUnlockKey(event) {
 
-    if (!blank || blank.classList.contains("unlocking")) {
+    if (
+        !blank ||
+        blank.classList.contains(
+            "unlocking"
+        ) ||
+        bootInProgress
+    ) {
         return;
     }
 
-    /*
-        Ignore control keys, arrows, etc.
-        The password is entered directly from the keyboard
-        while the page remains completely white.
-    */
-    if (event.key.length !== 1) {
+    if (
+        event.key.length !== 1
+    ) {
         return;
     }
 
-    unlockBuffer += event.key;
+    unlockBuffer +=
+        event.key;
 
-    if (unlockBuffer.length > unlockSequence.length) {
+    if (
+        unlockBuffer.length >
+        unlockSequence.length
+    ) {
+
         unlockBuffer =
-            unlockBuffer.slice(-unlockSequence.length);
+            unlockBuffer.slice(
+                -unlockSequence.length
+            );
     }
 
-    if (unlockBuffer === unlockSequence) {
+    if (
+        unlockBuffer ===
+        unlockSequence
+    ) {
+
         unlockBuffer = "";
+
         startBoot();
     }
 }
 
-document.addEventListener("keydown", handleUnlockKey);
+document.addEventListener(
+    "keydown",
+    handleUnlockKey
+);
 
 /* =========================================================
    SEARCH HELPERS
    ========================================================= */
 
 function escapeHTML(value) {
+
     return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 }
 
 function cleanURL(url) {
+
     return String(url)
-        .replace(/^https?:\/\//i, "")
-        .replace(/^www\./i, "")
-        .split(/[?#]/)[0];
+        .replace(
+            /^https?:\/\//i,
+            ""
+        )
+        .replace(
+            /^www\./i,
+            ""
+        )
+        .split(
+            /[?#]/
+        )[0];
 }
 
 /* =========================================================
-   EXTRACT RESULTS
+   EXTRACT SEARCH RESULTS
    ========================================================= */
 
 function extractResults(text) {
@@ -1137,27 +1743,46 @@ function extractResults(text) {
         )
     ];
 
-    for (const match of markdownLinks) {
+    for (
+        const match of markdownLinks
+    ) {
 
-        const title = match[1].trim();
-        const url = match[2].trim();
+        const title =
+            match[1].trim();
 
-        if (!url || !title) {
-            continue;
-        }
-
-        const lowerURL = url.toLowerCase();
+        const url =
+            match[2].trim();
 
         if (
-            lowerURL.includes("bing.com") ||
-            lowerURL.includes("google.com") ||
-            lowerURL.includes("yahoo.com") ||
-            lowerURL.includes("microsoft.com")
+            !url ||
+            !title
         ) {
             continue;
         }
 
-        if (seen.has(url)) {
+        const lowerURL =
+            url.toLowerCase();
+
+        if (
+            lowerURL.includes(
+                "bing.com"
+            ) ||
+            lowerURL.includes(
+                "google.com"
+            ) ||
+            lowerURL.includes(
+                "yahoo.com"
+            ) ||
+            lowerURL.includes(
+                "microsoft.com"
+            )
+        ) {
+            continue;
+        }
+
+        if (
+            seen.has(url)
+        ) {
             continue;
         }
 
@@ -1176,27 +1801,43 @@ function extractResults(text) {
         )
     ];
 
-    for (const match of plainURLs) {
+    for (
+        const match of plainURLs
+    ) {
 
         const url =
-            match[0].replace(/[.,;]+$/, "");
+            match[0].replace(
+                /[.,;]+$/,
+                ""
+            );
 
         if (!url) {
             continue;
         }
 
-        const lowerURL = url.toLowerCase();
+        const lowerURL =
+            url.toLowerCase();
 
         if (
-            lowerURL.includes("bing.com") ||
-            lowerURL.includes("google.com") ||
-            lowerURL.includes("yahoo.com") ||
-            lowerURL.includes("microsoft.com")
+            lowerURL.includes(
+                "bing.com"
+            ) ||
+            lowerURL.includes(
+                "google.com"
+            ) ||
+            lowerURL.includes(
+                "yahoo.com"
+            ) ||
+            lowerURL.includes(
+                "microsoft.com"
+            )
         ) {
             continue;
         }
 
-        if (seen.has(url)) {
+        if (
+            seen.has(url)
+        ) {
             continue;
         }
 
@@ -1209,7 +1850,10 @@ function extractResults(text) {
         });
     }
 
-    return found.slice(0, 5);
+    return found.slice(
+        0,
+        5
+    );
 }
 
 /* =========================================================
@@ -1218,12 +1862,18 @@ function extractResults(text) {
 
 async function performSearch(query) {
 
-    const engine = searchEngine.value;
-    const config = engineConfig[engine];
+    const engine =
+        searchEngine.value;
 
-    resultsPanel.classList.add("active");
+    const config =
+        engineConfig[engine];
 
-    resultsHeader.textContent = "SEARCHING...";
+    resultsPanel.classList.add(
+        "active"
+    );
+
+    resultsHeader.textContent =
+        "SEARCHING...";
 
     results.innerHTML =
         '<div class="loading">CONNECTING TO SEARCH ENGINE...</div>';
@@ -1234,20 +1884,27 @@ async function performSearch(query) {
 
     try {
 
-        const response = await fetch(
-            config.readerURL +
-            encodeURIComponent(query),
-            {
-                method: "GET"
-            }
-        );
+        const response =
+            await fetch(
+                config.readerURL +
+                encodeURIComponent(query),
+                {
+                    method: "GET"
+                }
+            );
 
         if (!response.ok) {
-            throw new Error("Search request failed.");
+
+            throw new Error(
+                "Search request failed."
+            );
         }
 
-        const text = await response.text();
-        const items = extractResults(text);
+        const text =
+            await response.text();
+
+        const items =
+            extractResults(text);
 
         if (!items.length) {
 
@@ -1263,34 +1920,37 @@ async function performSearch(query) {
         resultsHeader.textContent =
             `${engine.toUpperCase()} RESULTS`;
 
-        results.innerHTML = items
-            .map(item => {
+        results.innerHTML =
+            items
+                .map(item => {
 
-                const description =
-                    item.description
-                        ? `<div class="result-description">${escapeHTML(item.description)}</div>`
-                        : "";
+                    const description =
+                        item.description
+                            ? `<div class="result-description">${escapeHTML(item.description)}</div>`
+                            : "";
 
-                return `
-                    <a
-                        class="result"
-                        href="${escapeHTML(item.url)}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <div class="result-title">
-                            ${escapeHTML(item.title)}
-                        </div>
+                    return `
+                        <a
+                            class="result"
+                            href="${escapeHTML(item.url)}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <div class="result-title">
+                                ${escapeHTML(item.title)}
+                            </div>
 
-                        <div class="result-url">
-                            ${escapeHTML(cleanURL(item.url))}
-                        </div>
+                            <div class="result-url">
+                                ${escapeHTML(
+                                    cleanURL(item.url)
+                                )}
+                            </div>
 
-                        ${description}
-                    </a>
-                `;
-            })
-            .join("");
+                            ${description}
+                        </a>
+                    `;
+                })
+                .join("");
 
     } catch (error) {
 
@@ -1309,51 +1969,94 @@ async function performSearch(query) {
    SEARCH FORM
    ========================================================= */
 
-searchForm.addEventListener("submit", event => {
+searchForm.addEventListener(
+    "submit",
+    event => {
 
-    event.preventDefault();
+        event.preventDefault();
 
-    const query =
-        searchInput.value.trim();
+        const query =
+            searchInput.value.trim();
 
-    if (!query) {
-        searchInput.focus();
-        return;
+        if (!query) {
+
+            searchInput.focus();
+
+            return;
+        }
+
+        performSearch(query);
     }
-
-    performSearch(query);
-});
+);
 
 /* =========================================================
    LOCK SYSTEM
    ========================================================= */
 
-document.getElementById("lock").addEventListener("click", () => {
+document
+    .getElementById("lock")
+    .addEventListener(
+        "click",
+        () => {
 
-    experience.classList.remove("active");
+            /*
+                Stop the visible system first.
+            */
 
-    setTimeout(() => {
+            experience.classList.remove(
+                "active"
+            );
 
-        boot.style.transition =
-            "opacity .6s ease";
+            /*
+                Reset everything back to the original
+                completely white entry state.
 
-        boot.style.opacity = "0";
-        boot.classList.remove("active");
+                No page reload is needed.
+            */
 
-        /*
-            Return to the original completely white
-            secret-entry screen rather than reloading
-            the document.
-        */
-        blank.classList.remove("unlocking");
-        blank.style.opacity = "1";
-        blank.style.visibility = "visible";
-        blank.style.pointerEvents = "auto";
+            setTimeout(() => {
 
-        unlockBuffer = "";
+                bootInProgress =
+                    false;
 
-    }, 600);
-});
+                unlockBuffer =
+                    "";
+
+                resetBootState();
+
+                blank.classList.remove(
+                    "unlocking"
+                );
+
+                blank.style.opacity =
+                    "1";
+
+                blank.style.visibility =
+                    "visible";
+
+                blank.style.pointerEvents =
+                    "auto";
+
+                /*
+                    Ready for the next keyboard unlock.
+                */
+
+            }, 650);
+        }
+    );
+
+/* =========================================================
+   INITIAL STATE
+   ========================================================= */
+
+updateOperatingSystem();
+updateNetworkStatus();
+
+/*
+    The IP lookup isn't performed until the system is actually
+    unlocked. This keeps the initial white page completely
+    untouched and avoids unnecessary network activity.
+*/
 </script>
 
 </body>
