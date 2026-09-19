@@ -1,1 +1,3104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caleb Jao — Personal OS</title>
 
+<style>
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+    background: white;
+}
+
+button,
+input,
+select {
+    font-family: inherit;
+}
+
+/* =========================================================
+   BLANK START SCREEN
+========================================================= */
+
+#blank {
+    position: fixed;
+    inset: 0;
+    background: white;
+    z-index: 9999;
+}
+
+/* =========================================================
+   BOOT SCREEN
+========================================================= */
+
+#boot {
+    position: fixed;
+    inset: 0;
+    background: #030508;
+    color: white;
+    z-index: 9998;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#boot.active {
+    display: flex;
+}
+
+.boot-logo {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 9px;
+
+    opacity: 0;
+    animation: fadeIn 0.8s forwards;
+}
+
+.boot-subtitle {
+    margin-top: 14px;
+
+    font-size: 9px;
+    letter-spacing: 4px;
+
+    color: #637386;
+
+    opacity: 0;
+    animation: fadeIn 0.8s 0.3s forwards;
+}
+
+.boot-bar {
+    width: 260px;
+    height: 2px;
+
+    margin-top: 32px;
+
+    background: #18212c;
+    overflow: hidden;
+}
+
+.boot-progress {
+    width: 0%;
+    height: 100%;
+
+    background: white;
+
+    animation: progress 2s forwards;
+}
+
+.boot-status {
+    margin-top: 14px;
+
+    font-size: 8px;
+    letter-spacing: 3px;
+
+    color: #506174;
+
+    opacity: 0;
+    animation: fadeIn 0.8s 0.6s forwards;
+}
+
+/* =========================================================
+   MAIN SYSTEM
+========================================================= */
+
+#experience {
+    position: fixed;
+    inset: 0;
+
+    color: white;
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(50, 130, 255, 0.16),
+            transparent 32%
+        ),
+        linear-gradient(
+            135deg,
+            #020408,
+            #08111d 55%,
+            #020307
+        );
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity 1.2s ease,
+        visibility 1.2s ease;
+}
+
+#experience.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* =========================================================
+   BACKGROUND GRID
+========================================================= */
+
+.grid {
+    position: absolute;
+
+    inset: -50%;
+
+    width: 200%;
+    height: 200%;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px
+        );
+
+    background-size: 65px 65px;
+
+    transform:
+        perspective(600px)
+        rotateX(60deg);
+
+    animation: gridMove 16s linear infinite;
+}
+
+@keyframes gridMove {
+    from {
+        transform:
+            perspective(600px)
+            rotateX(60deg)
+            translateY(0);
+    }
+
+    to {
+        transform:
+            perspective(600px)
+            rotateX(60deg)
+            translateY(65px);
+    }
+}
+
+/* =========================================================
+   CENTER GLOW
+========================================================= */
+
+.glow {
+    position: absolute;
+
+    width: 550px;
+    height: 550px;
+
+    left: 50%;
+    top: 45%;
+
+    transform:
+        translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background:
+        rgba(0, 120, 255, 0.1);
+
+    filter: blur(110px);
+
+    animation: glowPulse 5s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+
+    0%,
+    100% {
+        transform:
+            translate(-50%, -50%)
+            scale(0.9);
+
+        opacity: 0.5;
+    }
+
+    50% {
+        transform:
+            translate(-50%, -50%)
+            scale(1.15);
+
+        opacity: 1;
+    }
+}
+
+/* =========================================================
+   PARTICLES
+========================================================= */
+
+.particle {
+    position: absolute;
+
+    width: 2px;
+    height: 2px;
+
+    border-radius: 50%;
+
+    background: white;
+
+    opacity: 0.3;
+
+    animation:
+        particleFloat
+        linear
+        infinite;
+}
+
+@keyframes particleFloat {
+
+    from {
+        transform: translateY(110vh);
+    }
+
+    to {
+        transform: translateY(-10vh);
+    }
+}
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.topbar {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 75px;
+
+    padding: 0 35px;
+
+    display: flex;
+
+    align-items: center;
+
+    z-index: 20;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,0.06);
+
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    flex: 0 0 220px;
+
+    color: #8ba5c0;
+
+    font-size: 11px;
+
+    letter-spacing: 5px;
+}
+
+/* =========================================================
+   ASSISTANT
+========================================================= */
+
+.assistant {
+    position: absolute;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    width:
+        min(
+            520px,
+            calc(100% - 520px)
+        );
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    pointer-events: none;
+
+    overflow: hidden;
+}
+
+.assistant-label {
+    flex-shrink: 0;
+
+    padding:
+        6px
+        9px;
+
+    border:
+        1px solid
+        rgba(100,170,255,0.22);
+
+    border-radius: 5px;
+
+    color: #72a9dc;
+
+    font-size: 7px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    background:
+        rgba(80,150,255,0.05);
+}
+
+.assistant-message {
+    min-width: 0;
+
+    color: #718397;
+
+    font-size: 10px;
+
+    letter-spacing: .5px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    transition:
+        opacity .5s ease,
+        transform .5s ease;
+}
+
+.assistant-message.changing {
+    opacity: 0;
+
+    transform:
+        translateY(-5px);
+}
+
+/* =========================================================
+   CLOCK
+========================================================= */
+
+.clock {
+    flex: 0 0 220px;
+
+    margin-left: auto;
+
+    text-align: right;
+
+    position: relative;
+
+    z-index: 5;
+}
+
+.time {
+    font-size: 17px;
+
+    font-weight: 600;
+
+    letter-spacing: 2px;
+}
+
+.date {
+    margin-top: 4px;
+
+    color: #64778b;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+}
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.content {
+    position: relative;
+
+    z-index: 10;
+
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    padding-top: 55px;
+}
+
+.eyebrow {
+    color: #70a9dc;
+
+    font-size: 10px;
+
+    letter-spacing: 6px;
+
+    opacity: 0;
+
+    transform:
+        translateY(20px);
+
+    animation:
+        reveal
+        0.8s
+        1.1s
+        forwards;
+}
+
+h1 {
+    margin: 18px 0 10px;
+
+    font-size:
+        clamp(50px, 8vw, 125px);
+
+    line-height: 0.88;
+
+    letter-spacing: -6px;
+
+    font-weight: 800;
+
+    background:
+        linear-gradient(
+            120deg,
+            #ffffff,
+            #91c4ff,
+            #ffffff
+        );
+
+    background-size: 200% auto;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+
+    opacity: 0;
+
+    transform:
+        scale(0.85);
+
+    animation:
+        titleReveal
+        1.2s
+        cubic-bezier(.16,1,.3,1)
+        0.6s
+        forwards,
+
+        shimmer
+        6s
+        linear
+        2s
+        infinite;
+}
+
+.subtitle {
+    color: #8c9caf;
+
+    font-size: 13px;
+
+    letter-spacing: 4px;
+
+    opacity: 0;
+
+    transform:
+        translateY(15px);
+
+    animation:
+        reveal
+        0.8s
+        1.7s
+        forwards;
+}
+
+/* =========================================================
+   SEARCH AREA
+========================================================= */
+
+.google-search {
+    width: min(720px, 88vw);
+
+    margin-top: 27px;
+
+    opacity: 0;
+
+    transform:
+        translateY(15px);
+
+    animation:
+        reveal
+        0.8s
+        2s
+        forwards;
+
+    transition:
+        transform .5s ease;
+}
+
+.google-search.results-open {
+    transform:
+        translateY(-5px);
+}
+
+.search-box {
+    height: 54px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding:
+        0
+        8px
+        0
+        18px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.10);
+
+    border-radius: 15px;
+
+    background:
+        rgba(255,255,255,0.045);
+
+    backdrop-filter:
+        blur(18px);
+
+    box-shadow:
+        0 15px 50px
+        rgba(0,0,0,0.25);
+
+    transition:
+        border-color 0.25s,
+        background 0.25s,
+        box-shadow 0.25s;
+}
+
+.search-box:focus-within {
+    border-color:
+        rgba(100,170,255,0.5);
+
+    background:
+        rgba(255,255,255,0.07);
+
+    box-shadow:
+        0 0 35px
+        rgba(50,130,255,0.13);
+}
+
+.search-icon {
+    color: #71859a;
+
+    font-size: 25px;
+
+    margin-right: 12px;
+}
+
+.search-box input {
+    flex: 1;
+
+    min-width: 0;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 14px;
+
+    letter-spacing: 0.5px;
+}
+
+.search-box input::placeholder {
+    color: #617285;
+}
+
+/* =========================================================
+   ENGINE DROPDOWN
+========================================================= */
+
+.engine-select {
+    height: 38px;
+
+    margin-right: 7px;
+
+    padding:
+        0
+        30px
+        0
+        12px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.08);
+
+    border-radius: 9px;
+
+    background:
+        rgba(255,255,255,0.06);
+
+    color: #9db7d3;
+
+    font-size: 8px;
+
+    font-weight: 600;
+
+    letter-spacing: 1px;
+
+    outline: none;
+
+    cursor: pointer;
+
+    appearance: none;
+
+    -webkit-appearance: none;
+
+    background-image:
+        linear-gradient(
+            45deg,
+            transparent 50%,
+            #6d8298 50%
+        ),
+        linear-gradient(
+            135deg,
+            #6d8298 50%,
+            transparent 50%
+        );
+
+    background-position:
+        calc(100% - 13px) 16px,
+        calc(100% - 9px) 16px;
+
+    background-size:
+        4px 4px,
+        4px 4px;
+
+    background-repeat: no-repeat;
+
+    transition:
+        all .25s ease;
+}
+
+.engine-select:hover,
+.engine-select:focus {
+    background-color:
+        rgba(90,160,255,0.12);
+
+    border-color:
+        rgba(100,170,255,0.35);
+
+    color: white;
+}
+
+.engine-select option {
+    background: #08111d;
+    color: white;
+}
+
+/* =========================================================
+   SEARCH BUTTON
+========================================================= */
+
+.search-box button {
+    height: 38px;
+
+    padding:
+        0
+        17px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.08);
+
+    border-radius: 9px;
+
+    background:
+        rgba(255,255,255,0.06);
+
+    color: #9db7d3;
+
+    font-size: 8px;
+
+    font-weight: 600;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    transition: all 0.25s;
+}
+
+.search-box button:hover {
+    background:
+        rgba(90,160,255,0.18);
+
+    border-color:
+        rgba(100,170,255,0.4);
+
+    color: white;
+}
+
+/* =========================================================
+   SEARCH RESULTS
+========================================================= */
+
+.results-panel {
+    width: 100%;
+
+    max-height: 0;
+
+    overflow: hidden;
+
+    opacity: 0;
+
+    margin-top: 0;
+
+    transition:
+        max-height .7s cubic-bezier(.16,1,.3,1),
+        opacity .4s ease,
+        margin-top .5s ease;
+}
+
+.results-panel.visible {
+    max-height: 430px;
+
+    opacity: 1;
+
+    margin-top: 12px;
+
+    overflow-y: auto;
+}
+
+.results-panel::-webkit-scrollbar {
+    width: 4px;
+}
+
+.results-panel::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.results-panel::-webkit-scrollbar-thumb {
+    background: rgba(100,160,220,.2);
+    border-radius: 10px;
+}
+
+/* =========================================================
+   RESULTS HEADER
+========================================================= */
+
+.results-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding:
+        9px
+        12px;
+
+    margin-bottom: 6px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.06);
+
+    border-radius: 8px;
+
+    background:
+        rgba(255,255,255,.025);
+}
+
+.results-heading {
+    font-size: 7px;
+
+    letter-spacing: 2px;
+
+    color: #526b84;
+}
+
+.results-engine {
+    color: #6d9ed0;
+
+    font-size: 7px;
+
+    letter-spacing: 1.5px;
+}
+
+/* =========================================================
+   RESULT ITEM
+========================================================= */
+
+.result {
+    display: block;
+
+    text-align: left;
+
+    text-decoration: none;
+
+    color: white;
+
+    padding:
+        13px
+        15px;
+
+    margin-bottom: 6px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.055);
+
+    border-radius: 9px;
+
+    background:
+        rgba(255,255,255,.025);
+
+    transition:
+        transform .25s ease,
+        background .25s ease,
+        border-color .25s ease;
+}
+
+.result:hover {
+    transform:
+        translateX(4px);
+
+    background:
+        rgba(60,130,210,.08);
+
+    border-color:
+        rgba(100,170,255,.25);
+}
+
+.result-number {
+    display: inline-block;
+
+    margin-right: 8px;
+
+    color: #4f769d;
+
+    font-size: 8px;
+
+    font-weight: 700;
+}
+
+.result-title {
+    display: inline;
+
+    color: #a9cfff;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    line-height: 1.4;
+}
+
+.result-url {
+    margin-top: 6px;
+
+    color: #557b9d;
+
+    font-size: 8px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.result-snippet {
+    margin-top: 6px;
+
+    color: #697d91;
+
+    font-size: 9px;
+
+    line-height: 1.45;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.results-loading {
+    padding: 30px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.06);
+
+    border-radius: 9px;
+
+    background:
+        rgba(255,255,255,.025);
+
+    color: #60778d;
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+}
+
+.loading-dots::after {
+    content: "";
+
+    animation:
+        loadingDots
+        1.2s
+        infinite;
+}
+
+@keyframes loadingDots {
+
+    0% {
+        content: "";
+    }
+
+    25% {
+        content: ".";
+    }
+
+    50% {
+        content: "..";
+    }
+
+    75% {
+        content: "...";
+    }
+
+    100% {
+        content: "";
+    }
+}
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.results-error {
+    padding: 22px;
+
+    border:
+        1px solid
+        rgba(255,100,100,.1);
+
+    border-radius: 9px;
+
+    background:
+        rgba(255,80,80,.025);
+
+    color: #8c6b72;
+
+    font-size: 9px;
+
+    line-height: 1.5;
+}
+
+/* =========================================================
+   FIND MORE
+========================================================= */
+
+.find-more {
+    width: 100%;
+
+    margin-top: 7px;
+
+    padding:
+        11px;
+
+    border:
+        1px solid
+        rgba(100,170,255,.14);
+
+    border-radius: 8px;
+
+    background:
+        rgba(70,140,220,.055);
+
+    color: #78a9d5;
+
+    font-size: 7px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    transition:
+        background .25s ease,
+        border-color .25s ease,
+        color .25s ease;
+}
+
+.find-more:hover {
+    background:
+        rgba(70,140,220,.13);
+
+    border-color:
+        rgba(100,170,255,.35);
+
+    color: white;
+}
+
+/* =========================================================
+   SYSTEM CARDS
+========================================================= */
+
+.cards {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 25px;
+
+    opacity: 0;
+
+    animation:
+        cardsReveal
+        1s
+        2.35s
+        forwards;
+
+    transition:
+        margin-top .5s ease;
+}
+
+.cards.results-shown {
+    margin-top: 14px;
+}
+
+.card {
+    width: 140px;
+
+    min-height: 68px;
+
+    padding: 13px;
+
+    text-align: left;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.08);
+
+    border-radius: 10px;
+
+    background:
+        rgba(255,255,255,0.025);
+
+    backdrop-filter:
+        blur(10px);
+
+    transition:
+        transform 0.25s,
+        border-color 0.25s,
+        background 0.25s;
+}
+
+.card:hover {
+    transform:
+        translateY(-5px);
+
+    border-color:
+        rgba(100,170,255,0.5);
+
+    background:
+        rgba(80,150,255,0.08);
+}
+
+.card-label {
+    color: #536579;
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+}
+
+.card-value {
+    margin-top: 8px;
+
+    font-size: 12px;
+
+    color: #d8e7f8;
+}
+
+/* =========================================================
+   LOCK BUTTON
+========================================================= */
+
+.bottom {
+    position: absolute;
+
+    bottom: 24px;
+
+    left: 0;
+    right: 0;
+
+    display: flex;
+
+    justify-content: center;
+
+    z-index: 30;
+}
+
+.lock {
+    border:
+        1px solid
+        rgba(255,255,255,0.07);
+
+    background:
+        rgba(255,255,255,0.025);
+
+    color: #526476;
+
+    padding:
+        9px
+        15px;
+
+    border-radius: 6px;
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    transition: all 0.25s;
+}
+
+.lock:hover {
+    color: white;
+
+    border-color:
+        rgba(255,255,255,0.25);
+}
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes progress {
+    to {
+        width: 100%;
+    }
+}
+
+@keyframes reveal {
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+@keyframes titleReveal {
+    to {
+        opacity: 1;
+
+        transform:
+            scale(1);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position:
+            200% center;
+    }
+
+    100% {
+        background-position:
+            -200% center;
+    }
+}
+
+@keyframes cardsReveal {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 850px) {
+
+    .brand {
+        flex-basis: 160px;
+    }
+
+    .clock {
+        flex-basis: 160px;
+    }
+
+    .assistant {
+        width:
+            calc(100% - 360px);
+    }
+
+    .result-snippet {
+        font-size: 8px;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .assistant {
+        display: none;
+    }
+
+    .topbar {
+        justify-content: space-between;
+    }
+
+    .brand,
+    .clock {
+        flex-basis: auto;
+    }
+
+    .google-search {
+        width: 90vw;
+    }
+
+    .results-panel.visible {
+        max-height: 330px;
+    }
+
+    .cards {
+        transform: scale(.9);
+    }
+}
+
+@media (max-width: 500px) {
+
+    .topbar {
+        padding: 0 18px;
+    }
+
+    .brand {
+        letter-spacing: 3px;
+        font-size: 9px;
+    }
+
+    .time {
+        font-size: 14px;
+    }
+
+    .date {
+        font-size: 7px;
+    }
+
+    h1 {
+        font-size: 48px;
+        letter-spacing: -4px;
+    }
+
+    .subtitle {
+        font-size: 9px;
+        letter-spacing: 3px;
+    }
+
+    .search-box {
+        padding-left: 12px;
+    }
+
+    .search-icon {
+        display: none;
+    }
+
+    .engine-select {
+        font-size: 7px;
+
+        margin-right: 4px;
+
+        padding-left: 8px;
+        padding-right: 25px;
+    }
+
+    .search-box button {
+        padding: 0 11px;
+    }
+
+    .result {
+        padding: 10px;
+    }
+
+    .result-title {
+        font-size: 10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =======================================================
+     BLANK WHITE PAGE
+======================================================= -->
+
+<div id="blank"></div>
+
+
+<!-- =======================================================
+     BOOT
+======================================================= -->
+
+<div id="boot">
+
+    <div class="boot-logo">
+        CJAO SYSTEMS
+    </div>
+
+    <div class="boot-subtitle">
+        PERSONAL OPERATING SYSTEM
+    </div>
+
+    <div class="boot-bar">
+        <div class="boot-progress"></div>
+    </div>
+
+    <div class="boot-status">
+        INITIALIZING SYSTEM
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     MAIN EXPERIENCE
+======================================================= -->
+
+<div id="experience">
+
+    <div class="grid"></div>
+
+    <div class="glow"></div>
+
+
+    <!-- PARTICLES -->
+
+    <div
+        class="particle"
+        style="left:5%;animation-duration:9s;">
+    </div>
+
+    <div
+        class="particle"
+        style="left:15%;animation-duration:13s;animation-delay:2s;">
+    </div>
+
+    <div
+        class="particle"
+        style="left:28%;animation-duration:10s;animation-delay:4s;">
+    </div>
+
+    <div
+        class="particle"
+        style="left:43%;animation-duration:14s;">
+    </div>
+
+    <div
+        class="particle"
+        style="left:57%;animation-duration:11s;animation-delay:3s;">
+    </div>
+
+    <div
+        class="particle"
+        style="left:70%;animation-duration:9s;animation-delay:5s;">
+    </div>
+
+    <div
+        class="particle"
+        style="left:83%;animation-duration:12s;animation-delay:1s;">
+    </div>
+
+    <div
+        class="particle"
+        style="left:94%;animation-duration:15s;animation-delay:6s;">
+    </div>
+
+
+    <!-- ===================================================
+         TOP BAR
+    ==================================================== -->
+
+    <header class="topbar">
+
+        <div class="brand">
+            CJAO / SYSTEM
+        </div>
+
+
+        <!-- ASSISTANT -->
+
+        <div class="assistant">
+
+            <div class="assistant-label">
+                ASSISTANT
+            </div>
+
+            <div
+                id="assistantMessage"
+                class="assistant-message">
+
+                Ready when you are.
+
+            </div>
+
+        </div>
+
+
+        <!-- CLOCK -->
+
+        <div class="clock">
+
+            <div
+                id="time"
+                class="time">
+
+                --:--:--
+
+            </div>
+
+            <div
+                id="date"
+                class="date">
+
+                ---
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- ===================================================
+         MAIN CONTENT
+    ==================================================== -->
+
+    <main class="content">
+
+        <div class="eyebrow">
+            SYSTEM ONLINE
+        </div>
+
+        <h1>
+            WELCOME<br>
+            CALEB JAO
+        </h1>
+
+        <div class="subtitle">
+            YOUR PERSONAL OPERATING SYSTEM
+        </div>
+
+
+        <!-- =================================================
+             SEARCH
+        ================================================== -->
+
+        <div
+            class="google-search"
+            id="searchArea">
+
+            <form id="searchForm">
+
+                <div class="search-box">
+
+                    <span class="search-icon">
+                        ⌕
+                    </span>
+
+
+                    <input
+                        id="searchInput"
+                        type="text"
+                        placeholder="Search..."
+                        autocomplete="off"
+                    >
+
+
+                    <!-- SEARCH ENGINE -->
+
+                    <select
+                        id="engineSelect"
+                        class="engine-select"
+                        aria-label="Search engine">
+
+                        <option value="google">
+                            GOOGLE
+                        </option>
+
+                        <option value="bing">
+                            BING
+                        </option>
+
+                        <option value="yahoo">
+                            YAHOO
+                        </option>
+
+                    </select>
+
+
+                    <button type="submit">
+                        SEARCH
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <!-- =================================================
+                 RESULTS
+            ================================================== -->
+
+            <div
+                id="resultsPanel"
+                class="results-panel">
+
+                <div class="results-header">
+
+                    <div class="results-heading">
+                        SEARCH RESULTS
+                    </div>
+
+                    <div
+                        id="resultsEngine"
+                        class="results-engine">
+
+                        GOOGLE
+
+                    </div>
+
+                </div>
+
+
+                <div id="resultsContent"></div>
+
+
+                <button
+                    id="findMore"
+                    class="find-more">
+
+                    FIND MORE
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SYSTEM INFO
+        ================================================== -->
+
+        <div
+            class="cards"
+            id="cards">
+
+            <div class="card">
+
+                <div class="card-label">
+                    STATUS
+                </div>
+
+                <div class="card-value">
+                    ● ONLINE
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-label">
+                    MODE
+                </div>
+
+                <div class="card-value">
+                    PERSONAL
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-label">
+                    SYSTEM
+                </div>
+
+                <div class="card-value">
+                    CJAO OS
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- ===================================================
+         LOCK
+    ==================================================== -->
+
+    <div class="bottom">
+
+        <button
+            class="lock"
+            id="lockButton">
+
+            LOCK SYSTEM
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   SECRET PASSWORD
+========================================================= */
+
+const SECRET = "alberte=mc2*";
+
+let typed = "";
+
+let unlocked = false;
+
+let launching = false;
+
+
+/* =========================================================
+   KEYBOARD UNLOCK
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (unlocked || launching) {
+            return;
+        }
+
+
+        /*
+            Ignore Shift, Ctrl, Alt,
+            arrows and other non-printable keys.
+        */
+
+        if (event.key.length !== 1) {
+            return;
+        }
+
+
+        const character =
+            event.key.toLowerCase();
+
+
+        typed += character;
+
+
+        if (typed.length > SECRET.length) {
+
+            typed =
+                typed.slice(-SECRET.length);
+
+        }
+
+
+        if (typed === SECRET) {
+
+            unlockSystem();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   UNLOCK SYSTEM
+========================================================= */
+
+function unlockSystem() {
+
+    if (unlocked || launching) {
+        return;
+    }
+
+    launching = true;
+
+    unlocked = true;
+
+
+    const blank =
+        document.getElementById("blank");
+
+    const boot =
+        document.getElementById("boot");
+
+    const experience =
+        document.getElementById("experience");
+
+
+    blank.style.display = "none";
+
+
+    boot.style.opacity = "1";
+
+    boot.style.transition = "";
+
+    boot.classList.add("active");
+
+
+    playStartupSound();
+
+
+    setTimeout(
+        function() {
+
+            boot.style.transition =
+                "opacity .8s ease";
+
+            boot.style.opacity = "0";
+
+
+            setTimeout(
+                function() {
+
+                    boot.classList.remove(
+                        "active"
+                    );
+
+                    boot.style.opacity = "1";
+
+                    boot.style.transition = "";
+
+
+                    experience.classList.add(
+                        "active"
+                    );
+
+
+                    updateClock();
+
+
+                    setTimeout(
+                        function() {
+
+                            document
+                                .getElementById(
+                                    "searchInput"
+                                )
+                                .focus();
+
+                        },
+                        700
+                    );
+
+
+                    launching = false;
+
+                },
+                800
+            );
+
+        },
+        2200
+    );
+
+}
+
+
+/* =========================================================
+   CLOCK
+========================================================= */
+
+function updateClock() {
+
+    const now =
+        new Date();
+
+
+    const time =
+        now.toLocaleTimeString(
+            undefined,
+            {
+                hour: "numeric",
+                minute: "2-digit",
+                second: "2-digit"
+            }
+        );
+
+
+    const date =
+        now.toLocaleDateString(
+            undefined,
+            {
+                weekday: "long",
+                month: "short",
+                day: "numeric",
+                year: "numeric"
+            }
+        );
+
+
+    document
+        .getElementById("time")
+        .textContent = time;
+
+
+    document
+        .getElementById("date")
+        .textContent = date;
+
+}
+
+
+updateClock();
+
+setInterval(
+    updateClock,
+    1000
+);
+
+
+/* =========================================================
+   ASSISTANT
+========================================================= */
+
+const assistantMessages = [
+
+    "Ready when you are.",
+
+    "You've got this. Keep moving.",
+
+    "One step at a time is still progress.",
+
+    "Build something you're proud of today.",
+
+    "Small progress compounds.",
+
+    "Don't wait for perfect. Start.",
+
+    "Your next idea could be the big one.",
+
+    "Stay curious. Keep creating.",
+
+    "Focus on what you can do right now.",
+
+    "Keep going. You're closer than you think.",
+
+    "Make today count.",
+
+    "Think bigger. Build smarter.",
+
+    "A blank page is just the beginning.",
+
+    "Keep learning. Keep experimenting.",
+
+    "You've already started. That's important.",
+
+    "Turn ideas into things.",
+
+    "Progress > perfection.",
+
+    "Stay focused. Stay creative."
+
+];
+
+
+let assistantIndex = 0;
+
+
+function rotateAssistantMessage() {
+
+    const message =
+        document.getElementById(
+            "assistantMessage"
+        );
+
+
+    message.classList.add(
+        "changing"
+    );
+
+
+    setTimeout(
+        function() {
+
+            assistantIndex =
+                (assistantIndex + 1)
+                % assistantMessages.length;
+
+
+            message.textContent =
+                assistantMessages[
+                    assistantIndex
+                ];
+
+
+            message.classList.remove(
+                "changing"
+            );
+
+        },
+        500
+    );
+
+}
+
+
+setInterval(
+    rotateAssistantMessage,
+    20000
+);
+
+
+/* =========================================================
+   SEARCH ENGINE CONFIGURATION
+========================================================= */
+
+const searchEngines = {
+
+    google: {
+        name: "GOOGLE",
+
+        searchURL:
+            "https://www.google.com/search?q=",
+
+        readerURL:
+            "https://r.jina.ai/http://www.google.com/search?q="
+
+    },
+
+    bing: {
+        name: "BING",
+
+        searchURL:
+            "https://www.bing.com/search?q=",
+
+        readerURL:
+            "https://r.jina.ai/http://www.bing.com/search?q="
+
+    },
+
+    yahoo: {
+        name: "YAHOO",
+
+        searchURL:
+            "https://search.yahoo.com/search?p=",
+
+        readerURL:
+            "https://r.jina.ai/http://search.yahoo.com/search?p="
+
+    }
+
+};
+
+
+let lastSearchQuery = "";
+
+let lastSearchEngine = "google";
+
+
+/* =========================================================
+   SEARCH ELEMENTS
+========================================================= */
+
+const searchForm =
+    document.getElementById(
+        "searchForm"
+    );
+
+const searchInput =
+    document.getElementById(
+        "searchInput"
+    );
+
+const engineSelect =
+    document.getElementById(
+        "engineSelect"
+    );
+
+const resultsPanel =
+    document.getElementById(
+        "resultsPanel"
+    );
+
+const resultsContent =
+    document.getElementById(
+        "resultsContent"
+    );
+
+const resultsEngine =
+    document.getElementById(
+        "resultsEngine"
+    );
+
+const findMore =
+    document.getElementById(
+        "findMore"
+    );
+
+const searchArea =
+    document.getElementById(
+        "searchArea"
+    );
+
+const cards =
+    document.getElementById(
+        "cards"
+    );
+
+
+/* =========================================================
+   ENGINE CHANGE
+========================================================= */
+
+engineSelect.addEventListener(
+    "change",
+    function() {
+
+        const engine =
+            engineSelect.value;
+
+
+        if (engine === "google") {
+
+            searchInput.placeholder =
+                "Search Google...";
+
+        }
+
+        else if (engine === "bing") {
+
+            searchInput.placeholder =
+                "Search Bing...";
+
+        }
+
+        else {
+
+            searchInput.placeholder =
+                "Search Yahoo...";
+
+        }
+
+
+        /*
+            If results are already displayed,
+            clear them because they belong to
+            the previous engine.
+        */
+
+        if (resultsPanel.classList.contains("visible")) {
+
+            resultsPanel.classList.remove(
+                "visible"
+            );
+
+            searchArea.classList.remove(
+                "results-open"
+            );
+
+            cards.classList.remove(
+                "results-shown"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+searchForm.addEventListener(
+    "submit",
+    function(event) {
+
+        event.preventDefault();
+
+
+        const query =
+            searchInput.value.trim();
+
+
+        if (!query) {
+
+            searchInput.focus();
+
+            return;
+
+        }
+
+
+        const engine =
+            engineSelect.value;
+
+
+        lastSearchQuery = query;
+
+        lastSearchEngine = engine;
+
+
+        loadSearchResults(
+            query,
+            engine
+        );
+
+    }
+);
+
+
+/* =========================================================
+   LOAD SEARCH RESULTS
+========================================================= */
+
+async function loadSearchResults(
+    query,
+    engine
+) {
+
+    const config =
+        searchEngines[engine];
+
+
+    /*
+        Open the result panel.
+    */
+
+    resultsPanel.classList.add(
+        "visible"
+    );
+
+    searchArea.classList.add(
+        "results-open"
+    );
+
+    cards.classList.add(
+        "results-shown"
+    );
+
+
+    resultsEngine.textContent =
+        config.name;
+
+
+    /*
+        Loading state.
+    */
+
+    resultsContent.innerHTML = `
+
+        <div class="results-loading">
+
+            SEARCHING
+            <span class="loading-dots"></span>
+
+        </div>
+
+    `;
+
+
+    /*
+        Fetch the public search page
+        through the reader endpoint.
+    */
+
+    const targetURL =
+        config.readerURL
+        + encodeURIComponent(query);
+
+
+    try {
+
+        const response =
+            await fetch(
+                targetURL,
+                {
+                    method: "GET"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Search request failed."
+            );
+
+        }
+
+
+        const text =
+            await response.text();
+
+
+        const results =
+            extractResults(
+                text,
+                engine
+            );
+
+
+        if (!results.length) {
+
+            showSearchError(
+                "The search engine did not return readable results. You can still use FIND MORE to open the full search."
+            );
+
+            return;
+
+        }
+
+
+        renderResults(
+            results.slice(0, 5),
+            engine
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Search error:",
+            error
+        );
+
+
+        showSearchError(
+            "Results could not be loaded inside CJAO OS. Use FIND MORE to open the full search."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   EXTRACT RESULTS
+========================================================= */
+
+function extractResults(
+    text,
+    engine
+) {
+
+    const results = [];
+
+
+    /*
+        First try Markdown-style links.
+
+        The reader service commonly returns
+        search pages in readable Markdown.
+    */
+
+    const markdownPattern =
+        /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g;
+
+
+    let match;
+
+
+    while (
+        (match = markdownPattern.exec(text))
+        !== null &&
+        results.length < 20
+    ) {
+
+        const title =
+            cleanText(match[1]);
+
+        const url =
+            match[2];
+
+
+        /*
+            Ignore navigation and
+            search-engine utility links.
+        */
+
+        if (
+            isUsefulResult(
+                title,
+                url,
+                engine
+            )
+        ) {
+
+            if (
+                !results.some(
+                    item =>
+                        item.url === url
+                )
+            ) {
+
+                results.push({
+
+                    title:
+                        title,
+
+                    url:
+                        url,
+
+                    snippet:
+                        createSnippet(
+                            text,
+                            match.index,
+                            title
+                        )
+
+                });
+
+            }
+
+        }
+
+    }
+
+
+    /*
+        If Markdown parsing did not find enough,
+        try plain URL extraction.
+    */
+
+    if (results.length < 5) {
+
+        const urlPattern =
+            /https?:\/\/[^\s<>"')]+/g;
+
+
+        const urls =
+            text.match(urlPattern)
+            || [];
+
+
+        for (
+            const url of urls
+        ) {
+
+            if (
+                results.length >= 5
+            ) {
+                break;
+            }
+
+
+            if (
+                !isUsefulResult(
+                    "",
+                    url,
+                    engine
+                )
+            ) {
+                continue;
+            }
+
+
+            if (
+                results.some(
+                    item =>
+                        item.url === url
+                )
+            ) {
+                continue;
+            }
+
+
+            let hostname = "";
+
+            try {
+
+                hostname =
+                    new URL(url).hostname;
+
+            }
+
+            catch (_) {
+
+                continue;
+
+            }
+
+
+            results.push({
+
+                title:
+                    hostname,
+
+                url:
+                    url,
+
+                snippet:
+                    "Open this result to view the page."
+
+            });
+
+        }
+
+    }
+
+
+    return results;
+
+}
+
+
+/* =========================================================
+   RESULT FILTER
+========================================================= */
+
+function isUsefulResult(
+    title,
+    url,
+    engine
+) {
+
+    if (!url) {
+        return false;
+    }
+
+
+    const lowerURL =
+        url.toLowerCase();
+
+    const lowerTitle =
+        title.toLowerCase();
+
+
+    /*
+        Remove search engine navigation.
+    */
+
+    const blockedDomains = [
+
+        "google.com/search",
+
+        "google.com/preferences",
+
+        "accounts.google.com",
+
+        "bing.com/search",
+
+        "bing.com/images",
+
+        "bing.com/videos",
+
+        "search.yahoo.com/search",
+
+        "login.yahoo.com"
+
+    ];
+
+
+    for (
+        const domain of blockedDomains
+    ) {
+
+        if (
+            lowerURL.includes(domain)
+        ) {
+            return false;
+        }
+
+    }
+
+
+    /*
+        Remove obvious navigation labels.
+    */
+
+    const blockedTitles = [
+
+        "sign in",
+
+        "settings",
+
+        "preferences",
+
+        "images",
+
+        "videos",
+
+        "maps",
+
+        "news",
+
+        "shopping",
+
+        "more"
+
+    ];
+
+
+    if (
+        blockedTitles.includes(
+            lowerTitle
+        )
+    ) {
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =========================================================
+   CLEAN TEXT
+========================================================= */
+
+function cleanText(text) {
+
+    return text
+        .replace(
+            /[*_`#]/g,
+            ""
+        )
+        .replace(
+            /\s+/g,
+            " "
+        )
+        .trim();
+
+}
+
+
+/* =========================================================
+   CREATE SNIPPET
+========================================================= */
+
+function createSnippet(
+    text,
+    position,
+    title
+) {
+
+    const nearby =
+        text.substring(
+            position,
+            position + 900
+        );
+
+
+    const cleaned =
+        nearby
+            .replace(
+                /\[[^\]]+\]\([^)]+\)/g,
+                ""
+            )
+            .replace(
+                /https?:\/\/\S+/g,
+                ""
+            )
+            .replace(
+                /[#*_`]/g,
+                ""
+            )
+            .replace(
+                /\s+/g,
+                " "
+            )
+            .trim();
+
+
+    if (
+        cleaned.length > title.length + 25
+    ) {
+
+        return cleaned
+            .substring(
+                Math.min(
+                    title.length,
+                    80
+                )
+            )
+            .substring(
+                0,
+                180
+            )
+            .trim();
+
+    }
+
+
+    return "Search result from the selected engine.";
+
+}
+
+
+/* =========================================================
+   RENDER RESULTS
+========================================================= */
+
+function renderResults(
+    results,
+    engine
+) {
+
+    resultsContent.innerHTML = "";
+
+
+    results.forEach(
+        function(result, index) {
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+
+            link.className =
+                "result";
+
+
+            link.href =
+                result.url;
+
+
+            link.target =
+                "_blank";
+
+
+            link.rel =
+                "noopener noreferrer";
+
+
+            const number =
+                document.createElement(
+                    "span"
+                );
+
+
+            number.className =
+                "result-number";
+
+
+            number.textContent =
+                "0" + (index + 1);
+
+
+            const title =
+                document.createElement(
+                    "span"
+                );
+
+
+            title.className =
+                "result-title";
+
+
+            title.textContent =
+                result.title;
+
+
+            const url =
+                document.createElement(
+                    "div"
+                );
+
+
+            url.className =
+                "result-url";
+
+
+            url.textContent =
+                result.url;
+
+
+            const snippet =
+                document.createElement(
+                    "div"
+                );
+
+
+            snippet.className =
+                "result-snippet";
+
+
+            snippet.textContent =
+                result.snippet;
+
+
+            link.appendChild(
+                number
+            );
+
+            link.appendChild(
+                title
+            );
+
+            link.appendChild(
+                url
+            );
+
+            link.appendChild(
+                snippet
+            );
+
+
+            resultsContent.appendChild(
+                link
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SEARCH ERROR
+========================================================= */
+
+function showSearchError(
+    message
+) {
+
+    resultsContent.innerHTML = `
+
+        <div class="results-error">
+
+            ${message}
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   FIND MORE
+========================================================= */
+
+findMore.addEventListener(
+    "click",
+    function() {
+
+        if (!lastSearchQuery) {
+            return;
+        }
+
+
+        const config =
+            searchEngines[
+                lastSearchEngine
+            ];
+
+
+        const url =
+            config.searchURL
+            + encodeURIComponent(
+                lastSearchQuery
+            );
+
+
+        /*
+            This is the actual search
+            engine URL.
+        */
+
+        window.open(
+            url,
+            "_blank",
+            "noopener,noreferrer"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   LOCK SYSTEM
+========================================================= */
+
+function lockSystem() {
+
+    const experience =
+        document.getElementById(
+            "experience"
+        );
+
+    const boot =
+        document.getElementById(
+            "boot"
+        );
+
+    const blank =
+        document.getElementById(
+            "blank"
+        );
+
+
+    experience.classList.remove(
+        "active"
+    );
+
+
+    unlocked = false;
+
+    launching = false;
+
+    typed = "";
+
+
+    boot.classList.remove(
+        "active"
+    );
+
+    boot.style.opacity = "1";
+
+    boot.style.transition = "";
+
+
+    resultsPanel.classList.remove(
+        "visible"
+    );
+
+    searchArea.classList.remove(
+        "results-open"
+    );
+
+    cards.classList.remove(
+        "results-shown"
+    );
+
+
+    setTimeout(
+        function() {
+
+            blank.style.display =
+                "block";
+
+        },
+        900
+    );
+
+}
+
+
+document
+    .getElementById("lockButton")
+    .addEventListener(
+        "click",
+        lockSystem
+    );
+
+
+/* =========================================================
+   STARTUP SOUND
+========================================================= */
+
+function playStartupSound() {
+
+    const AudioContext =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+
+    if (!AudioContext) {
+        return;
+    }
+
+
+    try {
+
+        const ctx =
+            new AudioContext();
+
+        const now =
+            ctx.currentTime;
+
+
+        const osc =
+            ctx.createOscillator();
+
+        const gain =
+            ctx.createGain();
+
+
+        osc.type = "sine";
+
+
+        osc.frequency.setValueAtTime(
+            160,
+            now
+        );
+
+        osc.frequency.exponentialRampToValueAtTime(
+            420,
+            now + 0.45
+        );
+
+        osc.frequency.exponentialRampToValueAtTime(
+            720,
+            now + 0.9
+        );
+
+
+        gain.gain.setValueAtTime(
+            0.0001,
+            now
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.12,
+            now + 0.08
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.0001,
+            now + 1.3
+        );
+
+
+        osc.connect(gain);
+
+        gain.connect(
+            ctx.destination
+        );
+
+
+        osc.start(now);
+
+        osc.stop(
+            now + 1.4
+        );
+
+
+        const osc2 =
+            ctx.createOscillator();
+
+        const gain2 =
+            ctx.createGain();
+
+
+        osc2.type =
+            "triangle";
+
+
+        osc2.frequency.setValueAtTime(
+            500,
+            now + 0.35
+        );
+
+        osc2.frequency.exponentialRampToValueAtTime(
+            1050,
+            now + 0.8
+        );
+
+
+        gain2.gain.setValueAtTime(
+            0.0001,
+            now
+        );
+
+        gain2.gain.exponentialRampToValueAtTime(
+            0.06,
+            now + 0.4
+        );
+
+        gain2.gain.exponentialRampToValueAtTime(
+            0.0001,
+            now + 1.1
+        );
+
+
+        osc2.connect(gain2);
+
+        gain2.connect(
+            ctx.destination
+        );
+
+
+        osc2.start(
+            now + 0.35
+        );
+
+        osc2.stop(
+            now + 1.2
+        );
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "Startup sound unavailable."
+        );
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
